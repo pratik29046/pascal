@@ -1,0 +1,1245 @@
+-------------------------------------------------------------------------------------------------------------------------
+{
+  This appliction show the fibonacci series get user input show the output
+  for fibonacci series in range of 0 to 47
+  step1:- enter your input in edit text box for range in 0 to 47
+  step2:-press the button or enter key
+  step3:- check your result n display of memobox
+}
+
+unit fib_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TFibo = class(TForm)
+    MOM_Display: TMemo;
+    LBL_Heading: TLabel;
+    BB_click: TButton;
+    EDE_Input: TEdit;
+    LBL_text: TLabel;
+    procedure BB_clickClick(Sender: TObject);
+    procedure edit(Sender: TObject; var Key: Char);
+    procedure EDE_InputChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Fibo: TFibo;
+
+implementation
+
+{$R *.dfm}
+
+procedure TFibo.BB_clickClick(Sender: TObject);
+
+var
+  n,n1,n2,z,count:Integer;
+begin
+try
+  if  EDE_Input.text='' then  //check the edit text is empty then procedure exits
+  exit;
+
+  MOM_Display.Lines.clear();    // clear for the line of memobox
+  n:=StrToInt(EDE_Input.Text);  // get user input in this var
+  n1:=0;
+  n2:=1;
+  count:=0;                // used of check condition
+  if n<=0 then             // check input is gretar than zero
+    begin
+      showmessage('Enter a positive number');  //show the result
+    end
+  else if n=1 then
+    begin
+    showmessage('The number is '+IntToStr(n1));
+    end
+  else while count< n Do         // check for condition using count var
+    begin
+      { showmessage('The series is'+IntToStr(n1)); }
+      MOM_Display.Lines.add(IntToStr(n1));   // add a values in memo box
+      z:= n1 + n2;       //addition of nuumber
+      n1:=n2;
+      n2:=z;
+      count:=count+1;         // value are increment
+       end;
+except
+on E:exception do
+  showmessage('The exception is create'+E.className);   // show the exception
+end;     // try end
+end;   //begin end
+
+   {
+     get the input for user and check the validation of
+     the edit box only take the numbers on give range of 0 to 47
+   }
+procedure TFibo.edit(Sender: TObject; var Key: Char);
+var
+  a:String;
+begin
+    a:=key;
+  if not(key in[#0,#13,#8,'0'..'9']) then
+  begin
+    key:=#0;  
+  end;
+  if key=#13 then
+  begin
+    EDE_Input.setFocus;
+    BB_click.Click;   // call the Button1.click
+  end;
+end;
+  {
+  the used event to change of edit textbox                                         
+  and check the edit box is empty and button is disable
+  }
+end;
+
+procedure TFibo.EDE_InputChange(Sender: TObject);
+begin
+  try
+    if EDE_Input.text='' then    // check the edit box is empty
+      BB_click.enabled:=False  // button is disable
+    else if StrToInt(EDE_Input.text)>47 then   //check the user input is greter than 47
+    begin
+      EDE_Input.text:='47';         // set the value last of 47
+      BB_click.enabled:=true;     // button is enabled
+    end
+    else
+    BB_click.Enabled:=true;
+  except
+  on E:exception do
+    showmessage('exception is create '+e.classname);   //exception shows
+  end;
+end;
+
+end.
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+                                                word count 
+	 {
+  This appliction show the how much number of word and char in your sentence
+  the get user input and count the number of words and how many word are repeated
+  your sentence and show the result of single word,repeated word in number using
+  count.
+  step1:- enter your input in edit text box in sentences.
+  step2:-press the result button or enter key.
+  step3:- check your result and display of memobox in your output.
+ }
+
+
+unit word_count_u;
+interface
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Menus;
+
+type
+  TTwc = class(TForm)
+    BB_click: TButton;
+    EDE_Input: TEdit;
+    LBL_Heading: TLabel;
+    LBL2_Text: TLabel;
+    MBM_Display: TMemo;
+    procedure BB_clickClick(Sender: TObject);
+    procedure EDE_InputKeyPress(Sender: TObject; var Key: Char);
+    procedure EDE_InputChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Twc: TTwc;
+
+implementation
+
+{$R *.dfm}
+
+procedure frequency(name: string);   //  procedure create  and pass the parameter
+var
+  i, j, wc: Integer;
+  temp, word2: string;
+  found: Boolean;
+  arrays: array[0..200] of string;
+begin
+Twc.MBM_Display.Lines.clear();  // clear the display box
+  try
+  temp:='';           // null
+  wc := 0;     // start with zero in word count value
+  for i := 1 to Length(name) do     // length of string
+  begin
+    if (name[i] in [' ',',',';']) then  // ignore space does not count
+    begin
+     found := False;
+      for j := 0 to Length(arrays) - 1 do      //store  the value
+      begin
+        if temp = arrays[j] then
+        begin
+          found := True;
+          Break;
+        end;
+      end;
+
+      if not found then    // found is not true
+      begin
+       arrays [wc] := temp;  // store the value of temp
+        wc := wc + 1;         // increment of word count
+      end;
+      temp := '';             // temp null
+    end
+    else
+    begin
+      temp := temp + name[i];    // temp and name value are store in temp
+      if i = Length(name) then
+      begin
+        found:= False;
+        for j := 0 to Length(arrays) - 1 do
+        begin
+          if temp = arrays[j] then
+          begin
+            found := True;
+            Break;
+          end;
+        end;
+        if not found then
+          arrays[wc] := temp;
+      end;
+    end;
+  end;
+  for j := 0 to Length(arrays) - 1 do
+  begin
+    if arrays[j] <> ' ' then
+      { ShowMessage(arrays[j]);  }        // show in words
+  end;
+  for i := 0 to Length(arrays) - 1 do
+  begin
+    word2 := arrays[i];
+    wc := 0;
+    if word2 = '' then
+      Continue;
+    temp := '';
+    for j := 1 to Length(name) do
+    begin
+      if (name[j] in [' ', ',', ';']) then
+      begin
+        if temp = word2 then
+          wc := wc + 1;
+        temp := '';
+      end
+      else
+      begin
+        temp := temp + name[j];
+        if j = Length(name) then
+        begin
+          if temp = word2 then
+            wc := wc + 1;                 //increment of word count
+          temp := '';
+        end
+      end;
+
+    end;
+   { ShowMessage(word2 + '  :' + IntToStr(wc));  }
+    Twc.MBM_Display.Lines.add(word2 +' := '+IntToStr(wc));  // show in memo box
+  end;
+  except
+    on e : Exception do
+    begin
+      ShowMessage('The exception is create'+e.Message+' '+e.ClassName);  //exception shows
+    end;
+end;
+end;
+{
+call the procedure used click button
+call the frequency procedure  pass the user input parameters
+}
+procedure TTwc.BB_clickClick(Sender: TObject);
+begin
+  frequency(EDE_Input.text);        // call the frequency procedure
+end;
+
+{
+ check for the validation of space in edit text
+ the char  start with first position does not add space in start char
+ used key press
+}
+procedure TTwc.EDE_InputKeyPress(Sender: TObject; var Key: Char);
+begin
+  begin
+    if (EDE_Input.Text='') and (key=' ') and not(key in[#0,#13,#8,'a'..'z','A'..'Z']) then
+    key := #0;  //  null
+  end;
+  {if not(key in[#0,#13,#8,'a'..'z','A'..'Z']) then
+    begin
+      key:=#0;
+    end; }
+end;
+
+{
+check the validation of button if the edidt text is empty then button is
+disable and enter word the button is enabled
+}
+procedure TTwc.EDE_InputChange(Sender: TObject);
+begin
+try
+ if EDE_Input.Text='' then                  // input is empty
+  begin
+    BB_click.enabled:=false;                // button is disabled
+  end
+  else
+    BB_click.enabled:=true;                 // button is enabled
+
+except
+on E: exception do
+ ShowMessage('exception are create'+E.className);    // exception show
+end;
+end;
+end.
+
+                                                     second methods
+ {
+  This appliction show the how much number of word and char in your sentence
+  the get user input and count the number of words and how many word are repeated
+  your sentence and show the result of single word,repeated word in number using
+  count.
+  step1:- enter your input in edit text box in sentences.
+  step2:-press the result button or enter key.
+  step3:- check your result and display of memobox in your output.
+ }
+
+
+unit word_count_u;
+interface
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Menus;
+
+type
+  TTwc = class(TForm)
+    BB_click: TButton;
+    EDE_Input: TEdit;
+    LBL_Heading: TLabel;
+    LBL2_Text: TLabel;
+    MBM_Display: TMemo;
+    procedure BB_clickClick(Sender: TObject);
+    procedure EDE_InputKeyPress(Sender: TObject; var Key: Char);
+    procedure EDE_InputChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Twc: TTwc;
+
+implementation
+
+{$R *.dfm}
+
+procedure frequency(name: string); //procedure create  and pass the parameter for user
+var
+  i, j, wc: Integer;
+  temp, word2: string;
+  found: Boolean;
+  arrays: array[0..200] of string;        // range of char 0 to 200
+begin
+Twc.MBM_Display.Lines.clear();  // clear the display box
+  try
+  temp:='';    // null
+  wc := 0;     // start with zero in word count value
+  for i := 1 to Length(name) do     // length of string
+  begin
+    if (name[i] in [' ',',',';']) then  // ignore space does not count
+    begin
+     found := False;
+      for j := 0 to Length(arrays) - 1 do      //store  the value
+      begin
+        if temp = arrays[j] then
+        begin
+          found := True;
+          Break;
+        end;
+      end;
+
+      if not found then    // found is not true
+      begin
+       arrays [wc] := temp;  // store the value of temp
+        wc := wc + 1;         // increment of word count
+      end;
+      temp := '';             // temp null
+    end
+    else
+    begin
+      temp := temp + name[i];    // temp and name value are store in temp
+      if i = Length(name) then
+      begin
+        found:= False;
+        for j := 0 to Length(arrays) - 1 do
+        begin
+          if temp = arrays[j] then
+          begin
+            found := True;
+            Break;
+          end;
+        end;
+        if not found then
+          arrays[wc] := temp;
+      end;
+    end;
+  end;
+  for j := 0 to Length(arrays) - 1 do
+  begin
+    if arrays[j] <> ' ' then           // not equal to space
+      { ShowMessage(arrays[j]);  }        // show in words
+  end;
+  for i := 0 to Length(arrays) - 1 do
+  begin
+    word2 := arrays[i];
+    wc := 0;
+    if word2 = '' then
+      Continue;
+    temp := '';
+    for j := 1 to Length(name) do
+    begin
+      if (name[j] in [' ', ',', ';']) then
+      begin
+        if temp = word2 then
+          wc := wc + 1;
+        temp := '';
+      end
+      else
+      begin
+        temp := temp + name[j];
+        if j = Length(name) then
+        begin
+          if temp = word2 then
+            wc := wc + 1;                 //increment of word count
+          temp := '';
+        end
+      end;
+
+    end;
+   { ShowMessage(word2 + '  :' + IntToStr(wc));  }
+    Twc.MBM_Display.Lines.add(word2 +' := '+IntToStr(wc));  // show in memo box
+  end;
+  except
+    on e : Exception do
+    begin
+      ShowMessage('The exception is create'+e.Message+' '+e.ClassName);  //exception shows
+    end;
+end;
+end;
+{
+call the procedure used click button
+call the frequency procedure  pass the user input parameters
+}
+procedure TTwc.BB_clickClick(Sender: TObject);
+begin
+  frequency(EDE_Input.text);        // call the frequency procedure
+end;
+
+{
+ check for the validation of space in edit text
+ the char  start with first position does not add space in start char
+ used key press
+}
+procedure TTwc.EDE_InputKeyPress(Sender: TObject; var Key: Char);
+begin
+
+    //if not(key in[#0,#13,#8,'a'..'z','A'..'Z']) then
+    //  key := #0  //  null
+    //else
+     if key = #13 then
+      BB_clickClick(sender);    //used for enter buttons 
+
+  {if not(key in[#0,#13,#8,'a'..'z','A'..'Z']) then
+    begin
+      key:=#0;
+    end; }
+end;
+
+{
+check the validation of button if the edidt text is empty then button is
+disable and enter word the button is enabled
+}
+procedure TTwc.EDE_InputChange(Sender: TObject);
+begin
+try
+ if trim(EDE_Input.Text)='' then                  // input is empty
+  begin
+    EDE_Input.Text :='';
+    BB_click.enabled:=false; // button is disabled
+  end
+  else
+    BB_click.enabled:=true; // button is enabled
+except
+on E: exception do
+ ShowMessage('exception are create'+E.className);    // exception show
+end;
+end;
+end.
+---------------------------------------------------------------------------------------------------------------------------	
+										prime number 
+{
+  This application show the prime number series form start with 2
+  show the range of the of the prime number.
+  step1:- enter your input in edit text box for range in start 2.
+  step2:-press the button or enter key.
+  step3:- check your result in display of memobox.
+}
+unit prime_u;
+interface
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TFRM_prime = class(TForm)
+    BTN_click: TButton;
+    MOM_Display: TMemo;
+    LBL_Heading: TLabel;
+    EDE_Input: TEdit;
+    LBL_Text: TLabel;
+    procedure BTN_clickClick(Sender: TObject);
+    procedure EDE_InputChange(Sender: TObject);
+    procedure EDE_InputKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+var
+  FRM_prime: TFRM_prime;
+implementation
+
+{$R *.dfm}
+
+{
+create the function and function name is primenumber
+pass the one parameter in integer.
+}
+function primenumber(n: integer): boolean;
+var
+  i: integer;
+  max: real;
+begin
+try
+  if n = 2 then   // number start with 2
+    primenumber := true
+  else if (n <= 1) or (n mod 2 = 0) then //check the condition
+   primenumber := false
+  else
+    begin
+    primenumber := true;
+    i := 3;
+    max := sqrt(n);     // square root of number
+    while i <= max do   // condition checks 3 is greter then i
+    begin
+      if n mod i = 0 then       // check condition input is mod by i
+      begin
+        primenumber := false;         //condition is true then exit the function
+        exit
+      end;
+      i := i + 1;     //increments of i by one
+    end;
+  end;
+except
+on E:exception do
+showMessage('exception create'+E.ClassName);  //show the exception
+end;
+end;
+
+{
+  call the prime function and pass the parameter using user input  then
+  click result button and check your result.
+}
+
+procedure TFRM_prime.BTN_clickClick(Sender: TObject);
+var
+  s,n: integer;
+begin
+ if FRM_prime.EDE_Input.text='' then  //check the edit text is empty then procedure exits
+   exit;
+ if (EDE_Input.text='1')or (EDE_Input.text='0') then  //check number in user
+  showMessage('invalid range');   //show the message
+  MOM_Display.Lines.Clear;  // first clear display box then show output
+  s:=StrTOInt(EDE_Input.text);   // get the user input in number
+  for n := 0 to s do       //start for the loop 0 to input
+   begin
+      if (primenumber(n)) then     //function call and pass user input
+      begin
+          MOM_Display.Lines.add(IntTOStr(n));   //display the result one by one
+      end;
+  end;
+end;
+
+
+
+{
+check the validation of button if the edit text is empty then button is
+disable and enter some number then button is enabled and click
+}
+procedure TFRM_prime.EDE_InputChange(Sender: TObject);
+begin
+  try
+    if EDE_Input.text='' then    // check the edit box is empty
+      BTN_click.enabled:=False  // button is disable
+    else if StrToInt(EDE_Input.text)>10000 then   //check the user input is greter than 100000000
+    begin
+      EDE_Input.text:='10000';         // set the value last of 10000000
+      BTN_click.enabled:=true;     // button is enabled
+    end
+    else
+    BTN_click.Enabled:=true;     //button is enabled
+  except
+  on E:exception do
+    showmessage('exception is create '+e.classname);   //exception shows
+  end;
+end;
+{
+check for validations used in onKeypress event.
+only take to number does not take char.
+does not accept space.
+}
+procedure TFRM_prime.EDE_InputKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not(key in[#0,#13,#8,'0'..'9']) then
+  begin
+    key:=#0;   //null
+  end
+  else if key = #13 then
+     BTN_clickClick(Sender);  // used for enter key
+end;
+
+end.
+
+--------------------------------------------------------------------------------------------------------------------------
+                                       String Palindrome 
+{
+   This application show the given string is palindrome.
+   the given string get user input
+  show the result in showmessagebox.
+  step1:- enter your input(String) in edittext box .
+  step2:-press the button or enter key.
+  step3:- check your result in display of popbox.
+  if given string is palindrome then show yes other then no.
+  check given string and revers string are same the result is true else false
+}
+
+
+unit palindrome_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TFRM_Palindrome = class(TForm)
+    EDE_Input: TEdit;
+    BOB_click: TButton;
+    LBL_heading: TLabel;
+    LBL_text: TLabel;
+    procedure BOB_clickClick(Sender: TObject);
+    procedure EDE_InputChange(Sender: TObject);
+    procedure EDE_InputKeyPress(Sender: TObject; var Key: Char);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FRM_Palindrome: TFRM_Palindrome;
+
+implementation
+
+{$R *.dfm}
+
+
+{
+  create a function function name is checkpalindrome and funtion type is
+  String.
+  get one parameter type is String.
+}
+function checkpalindrome(text:String):String;   //create a function
+var
+    temp:String;          // create a extra string var
+    x:Integer;            // used to the for loop
+begin
+  try
+    for x:=length(text) downto 1 do    //for loop start with lenght of input and end with 1
+      begin
+        temp:=temp+text[x];            // store temp var
+      end;
+
+    if text=temp then     // check the temp and user input
+      begin
+        showMessage('The String is palindrome')   //if the user input and temp are same
+      end
+    else
+        showMessage('The String is not palindrome');  // the  user input and temp are not same
+  except
+  on E:exception do
+    showMessage('exception occure '+E.ClassName+' '+E.Message);
+  end;
+end;
+
+
+{
+call the checkpalindrome function and pass the string parameter using user input
+then click result button and check your result.
+ }
+procedure TFRM_Palindrome.BOB_clickClick(Sender: TObject);
+begin
+    checkpalindrome(trim(EDE_Input.Text));    //call the function and pass user Input
+end;
+
+
+{
+check the validation of button if the edit text is empty then button is
+disable and enter some char then button is enabled and click.
+used trim method remove to the white space.
+}
+procedure TFRM_Palindrome.EDE_InputChange(Sender: TObject);
+begin
+  if trim(EDE_Input.Text)='' then      //trim method used
+    begin
+    EDE_Input.Text:='';      //null
+    BOB_click.Enabled :=False  //button disable
+    end
+  else
+  BOB_click.Enabled:=True;   //button enable
+
+end;
+
+{
+check the validation of used keypress procedure
+and clcik enter button show the result
+}
+procedure TFRM_Palindrome.EDE_InputKeyPress(Sender: TObject;
+  var Key: Char;
+  begin
+      if( key = #13) and (EDE_Input.Text<>'')  then    //check input not empty
+        BOB_clickClick(Sender);     // press enter key
+  end;
+
+end.
+
+-------------------------------------------------------------------------------------------------------------------------
+                                                   reverse string
+	unit Reverse_U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TF_Reverse = class(TForm)
+    BTN_click: TButton;
+    EDE_Input: TEdit;
+    LBL_text: TLabel;
+    procedure BTN_clickClick(Sender: TObject);
+    procedure EDE_InputKeyPress(Sender: TObject; var Key: Char);
+    procedure EDE_InputChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  F_Reverse: TF_Reverse;
+
+implementation
+
+{$R *.dfm}
+
+function checkReverse(text:String):String;
+var
+temp:String;
+i:Integer;
+begin
+  try
+    temp:='';
+    for i:= 1 to length(text) do
+      begin
+        temp:=text[i]+temp;
+      end;
+      ShowMessage(temp);
+  except
+  on E:exception do
+    showMessage('exception occuer'+E.ClassName+' '+E.Message);
+  end;
+end;
+
+procedure TF_Reverse.BTN_clickClick(Sender: TObject);
+begin
+   checkReverse(EDE_Input.Text);
+end;
+
+procedure TF_Reverse.EDE_InputKeyPress(Sender: TObject; var Key: Char);
+begin
+ { if not(key in[#0,#8,'a'..'z', 'A'..'Z' ]) then
+  begin
+    key:=#0;   //null
+  end ;}
+  if( key = #13) and (EDE_Input.Text<>'')  then    //check input not empty
+        BTN_clickClick(Sender);     // press enter key
+end;
+
+procedure TF_Reverse.EDE_InputChange(Sender: TObject);
+begin
+ if trim(EDE_Input.Text)='' then      //trim method used
+    begin
+    EDE_Input.Text:='';      //null
+    BTN_click.Enabled :=False  //button disable
+    end
+  else
+  BTN_click.Enabled:=True;   //button enable
+end;
+end.
+
+--------------------------------------------------------------------------------------------------------------------------
+													domain validation
+ {
+    the application get the input of email id and show the this email domain
+   name in pop box.
+   first check the mail validation if email validation are success then check
+   domain validation then show the domail of email id in popbox.
+   process:=
+   step1:- get gmail id in edit box.
+   step2:- press result button or enter key
+   step3:-show the result in popbox
+
+ }
+
+
+unit email_u;
+interface
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TForm1 = class(TForm)
+    EDE_Input: TEdit;
+    BOB_click: TButton;
+    LBL_heading: TLabel;
+    LBL_Text: TLabel;
+    procedure BOB_clickClick(Sender: TObject);
+    procedure EDE_InputKeyPress(Sender: TObject; var Key: Char);
+    procedure EDE_InputChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+function checkemail(email:String):Boolean;  //this type only return true and false values of result
+var
+  i: Integer;
+  temp1 , temp2 : String;    //check start and end
+begin
+  try
+    Result:= False;   //return
+
+    i:= Pos('@', email);  //check @ char pos in int
+
+    if (i = 0) then
+      Exit;
+
+    // for start info
+    temp1  := Copy(email,1,i - 1);  // check validation for start char in email
+
+    if temp1 = '' then      //info is null
+      Exit;
+
+    for i := 1 to Length(temp1) do     // loop for lenght of start info
+    begin
+      if not (temp1[i] in ['a'..'z', '.', 'A'..'Z', '0'..'9', '_' , '+' , '-' , '-' , '@' , '[' , ']' , '$' , '#' , '%' , '^' , '&' , '*' , '(' , ')' , '/' , '>' , '<' , ',' , '`' ,'~']) then
+        Exit;   //check for validations in before @
+    end;
+
+    // for  after @
+
+    temp2 := Copy(email, i + 1, Length(email));  //copy method used and store in temp2
+
+    if temp2 = '' then      // null
+      Exit;
+
+    for i := 1 to Length(temp2) do     // start 1 in  temp2 length
+    begin
+      if not (temp2[i] in ['A'..'Z', 'a'..'z', '0'..'9', '-', '.']) then
+        Exit;       // chack validation after @
+    end;
+
+    // used to the pos function and check the condition for Start of temp1 and temp2
+    if (pos('.', temp1) = 1) or (Pos('..', email) > 0) or (Pos('@@', email) > 0) or (pos('.@', email) > 0) or  (pos('.',temp2) = length(temp2)) then
+      Exit;      // check before @ and after @
+
+    if (Pos('-', temp2) = 1) or (pos('.', temp2) < 1) or (pos('.', temp2) = 1) or (pos('.', temp2) = length(temp2)) or (Pos('-', temp2) = Length(temp2)) or (pos('-', temp2) = 1) or (Pos('-', temp2) = Length(temp2)) then
+      Exit;      // check before @ and after @
+
+    Result:= True;    // return
+  except
+   on E:exception do
+   showMessage('exception occurs'+E.ClassName);    //shwo the exception
+  end;
+end;
+
+{
+ in this case call the checkemail function and pass the user input
+ then check condition.
+}
+procedure TForm1.BOB_clickClick(Sender: TObject);
+var
+emails:String;       // used to store copy function
+begin
+    if checkemail(EDE_Input.Text) then  //call the function and pass user input
+       begin
+          emails:= copy(EDE_Input.Text,pos('@',EDE_Input.Text )+1,Length(EDE_Input.Text)); //used to copy function.
+          showMessage(emails)    //show the domain only in pop message
+       end
+    else
+        showMessage('Email is Invalid please try again  ');
+end;
+
+
+procedure TForm1.EDE_InputKeyPress(Sender: TObject; var Key: Char);
+begin
+  if( key = #13) and (EDE_Input.Text<>'')  then    //check input not empty
+        BOB_clickClick(Sender);     // press enter key
+end;
+
+procedure TForm1.EDE_InputChange(Sender: TObject);
+begin
+ if trim(EDE_Input.Text)='' then      //trim method used
+    begin
+    EDE_Input.Text:='';      //null
+    BOB_click.Enabled :=False  //button disable
+    end
+  else
+  BOB_click.Enabled:=True;   //button enable
+end;
+
+end.
+
+
+--------------------------------------------------------------------------------------------------------------------------
+                                                    sortList
+{ This appliction show the sorting the list of integer get user input show the output
+  for ascending and descending order.
+  step1:- enter your input in edit text box for range in 0 to 500
+  step2:-press the button
+  step3:- check your result in display of memobox
+}
+
+unit sortlist_U;
+interface
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TFRM_SortList = class(TForm)
+    BOB_click: TButton;
+    MEM_Input: TMemo;
+    MEM_ascending: TMemo;
+    MEM_descending: TMemo;
+    LBL_heading: TLabel;
+    procedure BOB_clickClick(Sender: TObject);
+    procedure MEM_InputKeyPress(Sender: TObject; var Key: Char);
+    procedure MEM_InputChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FRM_SortList: TFRM_SortList;
+
+implementation
+
+{$R *.dfm}
+ {
+ create a function
+ }
+function SortList(var a:array of Integer):Integer;
+var
+  temp,i,j:Integer;
+begin
+ try
+    for i:= 0 to length(a)-1 do
+      for  j:=i+1 to length(a)-1 do
+        if a[i]>a[j]   then
+          begin
+            temp:= a[i];
+            a[i]:=a[j];
+            a[j]:=temp;
+        end;
+  except
+  on E: exception do
+      ShowMessage('exception create'+E.Message);
+  end;
+end;
+
+
+procedure TFRM_SortList.BOB_clickClick(Sender: TObject);
+var
+  a:array of Integer;
+  i,j:Integer;
+  l:String;
+  Z:TStringList;
+begin
+  try
+   { setlength(a,4);
+    a[0]:=4;
+    a[1]:=8;
+    a[2]:=2;
+    a[3]:=1; }
+  //sortList(a);
+ { for i:=0 to length(a)-1 do
+  Memo1.Lines.add(IntToStr(a[i]));  }
+
+    z:= TStringList.Create;
+    z.Assign(MEM_Input.Lines);
+    setlength(a,z.Count);
+    for i := 0 to z.Count-1 do
+    begin
+      a[i] := strtoint(z.Strings[i]);
+    end;
+
+    sortList(a);
+
+    for i:=0 to length(a)-1 do
+    begin
+      MEM_ascending.Lines.add(IntToStr(a[i]));
+    end;
+
+    for j:= length(a)-1 downTo 0 do
+    begin
+      MEM_descending.Lines.add(IntToStr(a[j]));
+    end;
+   except
+   on E: exception do
+      ShowMessage('exception create'+E.Message);
+   end;
+end;
+
+procedure TFRM_SortList.MEM_InputKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not(key in[#0,#13,#8,'0'..'9']) then
+  begin
+    key:=#0;  
+  end;
+  if key=#13 then
+  begin
+    If trim(MEM_Input.Lines[MEM_Input.lines.count - 1]) = '' then
+      key := #0;
+  end;
+end;
+
+procedure TFRM_SortList.MEM_InputChange(Sender: TObject);
+begin
+  //if not trim(MEM_Input.text) = '' then
+
+// if mem_input.lines[MEM_Input.lines.count - 1] = #13#10 then
+ //  mem_input.lines[MEM_Input.lines.count - 1] := '';
+
+
+  MEM_Input.Lines.text := StringReplace(MEM_Input.Lines.text,#13#10#13#10,#13#10,[rfReplaceAll]);
+  MEM_Input.SelStart := length(MEM_Input.Text);   // very important
+
+ if MEM_Input.Lines.text ='' then
+    begin
+      MEM_Input.Text:='';      //null
+      BOB_click.Enabled :=False  //button disable
+    end
+  else
+    BOB_click.Enabled:=True;   //button enable
+
+   {
+    if trim(MEM_Input.text)='' then    // check the edit box is empty
+      BOB_click.enabled:=False  // button is disable
+    else if StrToInt(MEM_Input.Lines)>10000 then   //check the user input is greter than 47
+    begin
+      MEM_Input.text:='10000';         // set the value last of 47
+      BOB_click.enabled:=true;     // button is enabled
+    end
+    else
+    BOB_click.Enabled:=true; }
+end;
+
+end.
+
+
+{ This appliction show the sorting the list of integer get user input show the output
+  for ascending and descending order.
+  step1:- enter your input in edit text box for range in 0 to 500
+  step2:-press the button
+  step3:- check your result in display of memobox
+}
+
+unit sortlist_U;
+interface
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  TFRM_SortList = class(TForm)
+    BOB_click: TButton;
+    MEM_Input: TMemo;
+    MEM_ascending: TMemo;
+    MEM_descending: TMemo;
+    LBL_heading: TLabel;
+    procedure BOB_clickClick(Sender: TObject);
+    procedure MEM_InputKeyPress(Sender: TObject; var Key: Char);
+    procedure MEM_InputChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FRM_SortList: TFRM_SortList;
+
+implementation
+
+{$R *.dfm}
+ {
+ create a function
+ }
+function SortList(var a:array of Integer):Integer;
+var
+  temp,i,j:Integer;
+begin
+ try
+    for i:= 0 to length(a)-1 do
+      for  j:=i+1 to length(a)-1 do
+        if a[i]>a[j]   then
+          begin
+            temp:= a[i];
+            a[i]:=a[j];
+            a[j]:=temp;
+        end;
+  except
+  on E: exception do
+      ShowMessage('exception create'+E.Message);
+  end;
+end;
+
+
+procedure TFRM_SortList.BOB_clickClick(Sender: TObject);
+var
+  a:array of Integer;
+  i,j:Integer;
+  l:String;
+  Z:TStringList;
+begin
+  try
+   { setlength(a,4);
+    a[0]:=4;
+    a[1]:=8;
+    a[2]:=2;
+    a[3]:=1; }
+  //sortList(a);
+ { for i:=0 to length(a)-1 do
+  Memo1.Lines.add(IntToStr(a[i]));  }
+
+    z:= TStringList.Create;
+    z.Assign(MEM_Input.Lines);
+    setlength(a,z.Count);
+    for i := 0 to z.Count-1 do
+    begin
+      a[i] := strtoint(z.Strings[i]);
+    end;
+
+    sortList(a);
+
+    MEM_ascending.Lines.Clear;
+    for i:=0 to length(a)-1 do
+    begin
+      MEM_ascending.Lines.add(IntToStr(a[i]));
+    end;
+
+    MEM_descending.Lines.Clear;
+    for j:= length(a)-1 downTo 0 do
+    begin
+      MEM_descending.Lines.add(IntToStr(a[j]));
+    end;
+
+   except
+   on E: exception do
+      ShowMessage('exception create'+E.Message);
+   end;
+end;
+
+procedure TFRM_SortList.MEM_InputKeyPress(Sender: TObject; var Key: Char);
+begin
+ if not(key in[#0,#13,#8,'0'..'9']) then
+  begin
+    key:=#0;  
+  end;
+  if key=#13 then
+  begin
+    If trim(MEM_Input.Lines[MEM_Input.lines.count - 1]) = '' then
+      key := #0;
+  end;
+end;
+
+procedure TFRM_SortList.MEM_InputChange(Sender: TObject);
+begin
+  //if not trim(MEM_Input.text) = '' then
+
+// if mem_input.lines[MEM_Input.lines.count - 1] = #13#10 then
+ //  mem_input.lines[MEM_Input.lines.count - 1] := '';
+
+
+  MEM_Input.Lines.text := StringReplace(MEM_Input.Lines.text,#13#10#13#10,#13#10,[rfReplaceAll]);
+  MEM_Input.SelStart := length(MEM_Input.Text);   // very important
+
+
+ if MEM_Input.Lines.text ='' then
+    begin
+      MEM_Input.Text:='';      //null
+      BOB_click.Enabled :=False  //button disable
+    end
+  else
+    BOB_click.Enabled:=True;   //button enable
+
+   if trim(MEM_Input.text)='' then    // check the edit box is empty
+      BOB_click.enabled:=False    // button is disable
+    else if (MEM_Input.Text) > 10000 then   //check the user input is greter than 47
+    begin
+      MEM_Input.text:='10000';         // set the value last of 47
+      BOB_click.enabled:=true;     // button is enabled
+    end
+    else
+    BOB_click.Enabled:=true;
+
+end;
+
+end.
+													

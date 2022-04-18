@@ -1,0 +1,14 @@
+program prime_p;
+
+uses
+  ExceptionLog,
+  Forms,
+  prime_u in 'prime_u.pas' {Form1};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.
